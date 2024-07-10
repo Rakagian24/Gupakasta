@@ -5,6 +5,7 @@ use App\Http\Controllers\AnggaranKegiatanController;
 use App\Http\Controllers\AnggaranRekeningController;
 use App\Http\Controllers\AnggaranSubKegiatanController;
 use App\Http\Controllers\BukuObjekController;
+use App\Http\Controllers\BukuRincianObjekController;
 use App\Models\Jenis;
 use App\Models\Objek;
 use App\Models\Program;
@@ -27,6 +28,7 @@ use App\Http\Controllers\RencanaKerjaAnggaranController;
 use App\Http\Controllers\RincianNotaController;
 use App\Models\Anggaran;
 use App\Models\AnggaranKegiatan;
+use App\Models\BukuRincianObjek;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,6 +76,8 @@ Route::resource('rencana_kerja_anggaran', RencanaKerjaAnggaranController::class)
 
 Route::resource('npd/nota_pencairan_dana', NotaPencairanDanaController::class)->middleware('auth');
 Route::resource('npd/rincian_nota', RincianNotaController::class)->middleware('auth');
+
+Route::resource('buku_rincian_objek', BukuRincianObjekController::class)->middleware('auth');
 
 Route::get('/kdo', function () {
     return view('kendaraandinasoperasional', [

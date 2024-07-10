@@ -16,10 +16,11 @@ class RincianNotaController extends Controller
      */
     public function index(Request $request)
     {
-        $rincianNota = RincianNota::with('notaPencairanDana.sub_kegiatan.kegiatan.program.bidangUrusan.urusan');
         $npdId = $request->query('npd_id');
+        $notaPencairanDana = NotaPencairanDana::findOrFail($npdId);
+        $rincianNota = RincianNota::with('notaPencairanDana.sub_kegiatan.kegiatan.program.bidangUrusan.urusan')->where('npd_id', $npdId)->get();
 
-        return view('npd.rincian.index', compact('rincianNota', 'npdId'));
+        return view('npd.rincian.index', compact('rincianNota', 'npdId', 'notaPencairanDana'));
     }
 
     /**
@@ -49,16 +50,16 @@ class RincianNotaController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'npd_id' => 'required|exists:nota_pencairan_dana,id',
-            'anggaran' => 'required|numeric',
+            'npd_id' => 'exists:nota_pencairan_dana,id',
+            'anggaran' => 'numeric',
             'akumulasi_sebelumnya' => 'nullable|numeric',
             'pencairan' => 'nullable|numeric',
             'sisa_anggaran' => 'nullable|numeric',
         ]);
-
+        // dd($validatedData);
         RincianNota::create($validatedData);
 
-        return redirect('/npd/rincian_nota')->with('success', 'Berhasil Menambahkan Rincian Nota Pencairan Dana');
+        return redirect()->route('rincian_nota.index', ['npd_id' => $request->npd_id])->with('success', 'Berhasil Menambahkan Rincian Nota Pencairan Dana');
     }
 
     /**
@@ -80,7 +81,8 @@ class RincianNotaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $rincianNota = RincianNota::with('notaPencairanDana.sub_kegiatan.kegiatan.program.bidangUrusan.urusan')->findOrFail($id);
+        return view('NPD.rincian.edit', compact('rincianNota'));
     }
 
     /**
@@ -92,7 +94,18 @@ class RincianNotaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'npd_id' => 'exists:nota_pencairan_dana,id',
+            'anggaran' => 'numeric',
+            'akumulasi_sebelumnya' => 'nullable|numeric',
+            'pencairan' => 'nullable|numeric',
+            'sisa_anggaran' => 'nullable|numeric',
+        ]);
+
+        $rincianNota = RincianNota::findOrFail($id);
+        $rincianNota->update($validatedData);
+
+        return redirect()->route('rincian_nota.index', ['npd_id' => $rincianNota->npd_id])->with('success', 'Berhasil Mengupdate Rincian Nota Pencairan Dana');
     }
 
     /**
@@ -103,6 +116,15 @@ class RincianNotaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $rincianNota = RincianNota::findOrFail($id);
+
+        // Simpan npd_id untuk pengalihan setelah penghapusan
+        $npd_id = $rincianNota->npd_id;
+
+        // Hapus rincian nota
+        $rincianNota->delete();
+
+        // Redirect ke halaman index dengan pesan sukses
+        return redirect()->route('rincian_nota.index', ['npd_id' => $npd_id])->with('success', 'Berhasil Menghapus Rincian Nota Pencairan Dana');
     }
 }

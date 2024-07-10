@@ -7,29 +7,32 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="header-title">
-                                <h4 class="card-title">Rincian Nota Pencairan Dana</h4>
+                                <h4 class="card-title">Edit Rincian Nota Pencairan Dana</h4>
                             </div>
                             <div class="header-action">
                             </div>
                         </div>
-                        <form method="post" action="/npd/rincian_nota" id="rincian-form">
+                        <form method="post" action="{{ route('rincian_nota.update', $rincianNota->id) }}" id="rincian-form">
                             @csrf
-                            <input type="hidden" name="npd_id" value="{{ $notaPencairanDana->id }}">
+                            @method('PUT')
+                            <input type="hidden" name="npd_id" value="{{ $rincianNota->npd_id }}">
                             <div class="card-body">
                                 <ul class="list-group list-group-flush mb-3">
-                                    <li class="list-group-item">PPTK : {{ $notaPencairanDana->pptk }}</li>
+                                    <li class="list-group-item">PPTK : {{ $rincianNota->notaPencairanDana->pptk }}</li>
                                     <li class="list-group-item">Program :
-                                        {{ $notaPencairanDana->sub_kegiatan->kegiatan->program->bidangUrusan->urusan->kode_urusan }}.{{ $notaPencairanDana->sub_kegiatan->kegiatan->program->bidangUrusan->kode_bidang_urusan }}
-                                        | {{ $notaPencairanDana->sub_kegiatan->kegiatan->program->nama_program }}
+                                        {{ $rincianNota->notaPencairanDana->sub_kegiatan->kegiatan->program->bidangUrusan->urusan->kode_urusan }}.{{ $rincianNota->notaPencairanDana->sub_kegiatan->kegiatan->program->bidangUrusan->kode_bidang_urusan }}
+                                        |
+                                        {{ $rincianNota->notaPencairanDana->sub_kegiatan->kegiatan->program->nama_program }}
                                     </li>
                                     <li class="list-group-item">Kegiatan :
-                                        {{ $notaPencairanDana->sub_kegiatan->kegiatan->program->bidangUrusan->urusan->kode_urusan }}.{{ $notaPencairanDana->sub_kegiatan->kegiatan->program->bidangUrusan->kode_bidang_urusan }}.{{ $notaPencairanDana->sub_kegiatan->kegiatan->program->kode_program }}.{{ $notaPencairanDana->sub_kegiatan->kegiatan->kode_kegiatan }}
+                                        {{ $rincianNota->notaPencairanDana->sub_kegiatan->kegiatan->program->bidangUrusan->urusan->kode_urusan }}.{{ $rincianNota->notaPencairanDana->sub_kegiatan->kegiatan->program->bidangUrusan->kode_bidang_urusan }}.{{ $rincianNota->notaPencairanDana->sub_kegiatan->kegiatan->program->kode_program }}.{{ $rincianNota->notaPencairanDana->sub_kegiatan->kegiatan->kode_kegiatan }}
                                     </li>
                                     <li class="list-group-item">Sub Kegiatan :
-                                        {{ $notaPencairanDana->sub_kegiatan->kegiatan->program->bidangUrusan->urusan->kode_urusan }}.{{ $notaPencairanDana->sub_kegiatan->kegiatan->program->bidangUrusan->kode_bidang_urusan }}.{{ $notaPencairanDana->sub_kegiatan->kegiatan->program->kode_program }}.{{ $notaPencairanDana->sub_kegiatan->kegiatan->kode_kegiatan }}.{{ $notaPencairanDana->sub_kegiatan->kode_sub_kegiatan }}
+                                        {{ $rincianNota->notaPencairanDana->sub_kegiatan->kegiatan->program->bidangUrusan->urusan->kode_urusan }}.{{ $rincianNota->notaPencairanDana->sub_kegiatan->kegiatan->program->bidangUrusan->kode_bidang_urusan }}.{{ $rincianNota->notaPencairanDana->sub_kegiatan->kegiatan->program->kode_program }}.{{ $rincianNota->notaPencairanDana->sub_kegiatan->kode_sub_kegiatan }}
                                     </li>
-                                    <li class="list-group-item">Tahun Anggaran : {{ $notaPencairanDana->tahun }}</li>
-                                    <li class="list-group-item">Nomer : {{ $notaPencairanDana->nomer }} </li>
+                                    <li class="list-group-item">Tahun Anggaran :
+                                        {{ $rincianNota->notaPencairanDana->tahun }}</li>
+                                    <li class="list-group-item">Nomer : {{ $rincianNota->notaPencairanDana->nomer }} </li>
                                 </ul>
                                 <div class="input-group mb-4">
                                     <div class="input-group-prepend">
@@ -37,8 +40,9 @@
                                     </div>
                                     <input type="text" id="anggaran_formatted" class="form-control"
                                         placeholder="Anggaran" aria-label="Anggaran" aria-describedby="basic-addon1"
-                                        value="{{ number_format($totalAnggaran, 0, ',', '.') }}" required>
-                                    <input type="hidden" id="anggaran" name="anggaran" value="{{ $totalAnggaran }}">
+                                        value="{{ number_format($rincianNota->anggaran, 0, ',', '.') }}" required>
+                                    <input type="hidden" id="anggaran" name="anggaran"
+                                        value="{{ $rincianNota->anggaran }}">
                                     @error('anggaran')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -50,8 +54,10 @@
                                     </div>
                                     <input type="text" id="akumulasi_formatted" class="form-control"
                                         placeholder="Akumulasi Sebelumnya" aria-label="Akumulasi Sebelumnya"
-                                        aria-describedby="basic-addon1">
-                                    <input type="hidden" id="akumulasi" name="akumulasi_sebelumnya">
+                                        aria-describedby="basic-addon1"
+                                        value="{{ number_format($rincianNota->akumulasi_sebelumnya, 0, ',', '.') }}">
+                                    <input type="hidden" id="akumulasi" name="akumulasi_sebelumnya"
+                                        value="{{ $rincianNota->akumulasi_sebelumnya }}">
                                     @error('akumulasi_sebelumnya')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -62,8 +68,10 @@
                                     </div>
                                     <input type="text" id="pencairan_formatted" class="form-control"
                                         placeholder="Pencairan Saat Ini" aria-label="Pencairan Saat Ini"
-                                        aria-describedby="basic-addon1" required>
-                                    <input type="hidden" id="pencairan" name="pencairan">
+                                        aria-describedby="basic-addon1" required
+                                        value="{{ number_format($rincianNota->pencairan, 0, ',', '.') }}">
+                                    <input type="hidden" id="pencairan" name="pencairan"
+                                        value="{{ $rincianNota->pencairan }}">
                                     @error('pencairan')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -74,13 +82,15 @@
                                     </div>
                                     <input type="text" id="sisa_anggaran_formatted" class="form-control"
                                         placeholder="Sisa Anggaran" aria-label="Sisa Anggaran"
-                                        aria-describedby="basic-addon1" readonly>
-                                    <input type="hidden" id="sisa_anggaran" name="sisa_anggaran">
+                                        aria-describedby="basic-addon1" readonly
+                                        value="{{ number_format($rincianNota->sisa_anggaran, 0, ',', '.') }}">
+                                    <input type="hidden" id="sisa_anggaran" name="sisa_anggaran"
+                                        value="{{ $rincianNota->sisa_anggaran }}">
                                     @error('sisa_anggaran')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                <button type="submit" class="btn btn-primary mr-2">Update</button>
                                 <a href="/npd/rincian_nota" class="btn bg-danger">Cancel</a>
                             </div>
                         </form>
