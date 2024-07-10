@@ -17,8 +17,8 @@ class SubRincianObjek extends Model
         return $this->belongsTo(RincianObjek::class, 'kode_rincian_objek');
     }
 
-    public function bukuObjek()
+    public function anggaranRekening()
     {
-        return $this->hasMany(BukuObjek::class, 'kode_sub_rincian_objek');
+        return $this->hasMany(AnggaranRekening::class, 'kode_sub_rincian_objek', 'id');
     }
 }

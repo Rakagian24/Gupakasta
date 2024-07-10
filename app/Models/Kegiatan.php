@@ -11,9 +11,8 @@ class Kegiatan extends Model
 
     protected $table = 'kegiatan';
     protected $primaryKey = 'kode_kegiatan';
-    public $incrementing = false; // Assuming 'kode_urusan' is not auto-incrementing
+    public $incrementing = false;
     protected $keyType = 'string';
-
 
     public function program()
     {
@@ -25,8 +24,8 @@ class Kegiatan extends Model
         return $this->hasMany(SubKegiatan::class, 'kode_kegiatan');
     }
 
-    public function nota()
+    public function anggaranSubKegiatan()
     {
-        return $this->hasMany(Nota::class, 'kode_program');
+        return $this->hasMany(AnggaranSubKegiatan::class, 'kode_kegiatan', 'kode_kegiatan');
     }
 }

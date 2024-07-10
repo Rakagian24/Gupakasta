@@ -559,6 +559,9 @@ Index Of Script
     Array.from(choies,(elem) => {
         new Choices(elem, {
             removeItemButton: true,
+                shouldSort: false,
+                itemSelectText: 'Tekan untuk Memilih',
+                searchResultLimit: -1
         })
     })
 })(jQuery);

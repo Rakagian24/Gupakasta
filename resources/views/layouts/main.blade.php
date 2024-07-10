@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Gupakasta | Dinas Perumahan dan Kawasan Pemukiman Kota Bandung</title>
 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ asset('images/dpkp.png') }}" />
 
@@ -23,6 +25,9 @@
 
     <footer class="iq-footer">
         <div class="container-fluid">
+            <!-- Breadcrumbs -->
+            {{-- {{ Breadcrumbs::render() }} --}}
+
             <div class="row">
                 <div class="col-lg-6">
                     <ul class="list-inline mb-0">
@@ -72,6 +77,7 @@
     <!-- Emoji picker -->
     <script src="{{ asset('vendor/emoji-picker-element/index.js') }}" type="module"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <!-- app JavaScript -->
     <script src="{{ asset('js/app.js') }}"></script>

@@ -11,16 +11,21 @@ class SubKegiatan extends Model
 
     protected $table = 'sub_kegiatan';
     protected $primaryKey = 'kode_sub_kegiatan';
-    public $incrementing = false; // Assuming 'kode_urusan' is not auto-incrementing
+    public $incrementing = false;
     protected $keyType = 'string';
 
     public function kegiatan()
     {
-        return $this->belongsTo(Kegiatan::class, 'kode_kegiatan');
+        return $this->belongsTo(Kegiatan::class, 'kode_kegiatan', 'kode_kegiatan');
     }
 
-    public function nota()
+    public function anggaranSubKegiatan()
     {
-        return $this->hasMany(Nota::class, 'kode_program');
+        return $this->hasMany(AnggaranSubKegiatan::class, 'kode_sub_kegiatan', 'id');
+    }
+
+    public function nota_pencairan_dana()
+    {
+        return $this->hasMany(NotaPencairanDana::class, 'kode_sub_kegiatan', 'id');
     }
 }

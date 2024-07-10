@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\AnggaranController;
+use App\Http\Controllers\AnggaranKegiatanController;
+use App\Http\Controllers\AnggaranRekeningController;
+use App\Http\Controllers\AnggaranSubKegiatanController;
 use App\Http\Controllers\BukuObjekController;
 use App\Models\Jenis;
 use App\Models\Objek;
@@ -18,6 +22,11 @@ use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\RekeningController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NotaPencairanDanaController;
+use App\Http\Controllers\RencanaKerjaAnggaranController;
+use App\Http\Controllers\RincianNotaController;
+use App\Models\Anggaran;
+use App\Models\AnggaranKegiatan;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,63 +39,12 @@ use App\Http\Controllers\DashboardController;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard');
-});
-
-Route::get('/gu', function () {
-    return view('gantiuang');
-});
-
-Route::get('/bbp', function () {
-    return view('bukubesarpembantu');
-});
-
-Route::get('/bku', function () {
-    return view('bukukasumum');
-});
-
-Route::get('/bpp', function () {
-    return view('bukupembantupajak');
-});
-
-Route::get('/bro', function () {
-    return view('bukurincianobjek');
-});
-
-Route::get('/kkk', function () {
-    return view('kartukendalikegiatan');
-});
-
-// Route::get('/npd', function () {
-//     return view('notapencairandana');
+// Route::get('/', function () {
+//     return view('dashboard');
 // });
-
-Route::get('/kdo', function () {
-    return view('kendaraandinasoperasional', [
-        'kendaraan' => KendaraanDinas::all()
-    ]);
-});
-
-Route::get('/formbro', function () {
-    return view('/form/formrincianobjek');
-});
-
-Route::resource('npd/nota', NotaController::class)->middleware('auth');
-Route::resource('bro/objek', BukuObjekController::class)->middleware('auth');
-
-Route::get('/rekening/urusan', [ProgramController::class, 'urusan']);
-Route::get('/rekening/bidang_urusan', [ProgramController::class, 'bidangUrusan']);
-Route::get('/rekening/program', [ProgramController::class, 'program']);
-Route::get('/rekening/kegiatan', [ProgramController::class, 'kegiatan']);
-Route::get('/rekening/sub_kegiatan', [ProgramController::class, 'subKegiatan']);
-
-Route::get('/program/akun', [RekeningController::class, 'akun']);
-Route::get('/program/kelompok', [RekeningController::class, 'kelompok']);
-Route::get('/program/jenis', [RekeningController::class, 'jenis']);
-Route::get('/program/objek', [RekeningController::class, 'objek']);
-Route::get('/program/rincian_objek', [RekeningController::class, 'rincianObjek']);
-Route::get('/program/sub_rincian_objek', [RekeningController::class, 'subRincianObjek']);
+Route::get('/dashboard', function () {
+    return view('dashboard.index');
+})->middleware('auth')->name('dashboard');
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate']);
@@ -95,6 +53,30 @@ Route::post('/logout', [LoginController::class, 'logout']);
 Route::get('/register', [RegisterController::class, 'index'])->middleware('guest');
 Route::post('/register', [RegisterController::class, 'store']);
 
-Route::get('/dashboard', function () {
-    return view('dashboard.index');
-})->middleware('auth');
+Route::get('/program/urusan', [ProgramController::class, 'urusan']);
+Route::get('/program/bidang_urusan', [ProgramController::class, 'bidangUrusan']);
+Route::get('/program/program', [ProgramController::class, 'program']);
+Route::get('/program/kegiatan', [ProgramController::class, 'kegiatan']);
+Route::get('/program/sub_kegiatan', [ProgramController::class, 'subKegiatan']);
+
+Route::get('/rekening/akun', [RekeningController::class, 'akun']);
+Route::get('/rekening/kelompok', [RekeningController::class, 'kelompok']);
+Route::get('/rekening/jenis', [RekeningController::class, 'jenis']);
+Route::get('/rekening/objek', [RekeningController::class, 'objek']);
+Route::get('/rekening/rincian_objek', [RekeningController::class, 'rincianObjek']);
+Route::get('/rekening/sub_rincian_objek', [RekeningController::class, 'subRincianObjek']);
+
+Route::resource('/anggaran/kegiatan', AnggaranKegiatanController::class)->middleware('auth');
+Route::resource('/anggaran/sub_kegiatan', AnggaranSubKegiatanController::class)->middleware('auth');
+Route::resource('/anggaran/rekening', AnggaranRekeningController::class)->middleware('auth');
+
+Route::resource('rencana_kerja_anggaran', RencanaKerjaAnggaranController::class)->middleware('auth');
+
+Route::resource('npd/nota_pencairan_dana', NotaPencairanDanaController::class)->middleware('auth');
+Route::resource('npd/rincian_nota', RincianNotaController::class)->middleware('auth');
+
+Route::get('/kdo', function () {
+    return view('kendaraandinasoperasional', [
+        'kendaraan' => KendaraanDinas::all()
+    ]);
+});

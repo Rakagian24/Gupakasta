@@ -23,9 +23,4 @@ class Program extends Model
     {
         return $this->hasMany(Kegiatan::class, 'kode_program');
     }
-
-    public function nota()
-    {
-        return $this->hasMany(Nota::class, 'kode_program');
-    }
 }
