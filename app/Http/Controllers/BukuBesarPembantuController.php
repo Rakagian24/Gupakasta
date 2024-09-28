@@ -2,90 +2,66 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BukuBesarPembantu;
-use App\Models\BukuRincianObjek;
-use App\Models\NotaPencairanDana;
+use App\Models\Pajak;
+use App\Models\RincianNota;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\BukuRincianObjek;
 
 class BukuBesarPembantuController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    private function getSortedData()
+    {
+        $subRincianObjekDanSubKegiatan = BukuRincianObjek::with([
+            'anggaranRekening.subRincianObjek.rincianObjek.objek.jenis.kelompok.akun',
+            'anggaranRekening.anggaranSubKegiatan.subKegiatan.kegiatan.program.bidangUrusan.urusan'
+        ])->get();
+
+        $rincianNota = RincianNota::with('notaPencairanDana.sub_kegiatan.kegiatan.program.bidangUrusan.urusan')->get();
+        $pajak = Pajak::all();
+
+        $data = collect();
+        $data = $data->merge($rincianNota);
+        $data = $data->merge($subRincianObjekDanSubKegiatan);
+
+        $pajak->each(function ($item) {
+            $item->pencairan = $item->penyetoran;
+            $item->gu = $item->pemotongan;
+        });
+        $data = $data->merge($pajak);
+
+        $sortedData = $data->sortBy('tanggal')->values();
+
+        $saldo = 0;
+        foreach ($sortedData as $item) {
+            $debet = $item->pencairan ?? 0;
+            $kredit = $item->gu ?? 0;
+            $saldo += $debet - $kredit;
+            $item->saldo = $saldo;
+
+            if (isset($item->notaPencairanDana)) {
+                $item->uraian = 'Nota Pencairan Dana(NPD)';
+            } else {
+                $item->uraian = $item->uraian ?? 'Uraian Tidak Diketahui';
+            }
+        }
+
+        return $sortedData;
+    }
+
     public function index()
     {
-        $notaPencairanDana = NotaPencairanDana::with('sub_kegiatan.kegiatan.program.bidangUrusan.urusan')->get();
-        $subRincianObjek = BukuRincianObjek::with('anggaranRekening.subRincianObjek.rincianObjek.objek.jenis.kelompok.akun')->get();
-        $subKegiatan = BukuRincianObjek::with('anggaranRekening.anggaranSubKegiatan.subKegiatan.kegiatan.program.bidangUrusan.urusan')->get();
-
-        return view('buku.bbp', compact('notaPencairanDana', 'subRincianObjek', 'subKegiatan'));
+        $sortedData = $this->getSortedData();
+        return view('buku.bbp', compact('sortedData'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function print()
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\BukuBesarPembantu  $bukuBesarPembantu
-     * @return \Illuminate\Http\Response
-     */
-    public function show(BukuBesarPembantu $bukuBesarPembantu)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\BukuBesarPembantu  $bukuBesarPembantu
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(BukuBesarPembantu $bukuBesarPembantu)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\BukuBesarPembantu  $bukuBesarPembantu
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, BukuBesarPembantu $bukuBesarPembantu)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\BukuBesarPembantu  $bukuBesarPembantu
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(BukuBesarPembantu $bukuBesarPembantu)
-    {
-        //
+        // $sortedData = $this->getSortedData();
+        // return view('pdf.bbp', compact('sortedData'));
+        $sortedData = $this->getSortedData();
+        $pdf = Pdf::loadView('pdf.bbp', ['sortedData' => $sortedData]);
+        // return $pdf->download('Buku_Besar_Pembantu.pdf');
+        return $pdf->stream();
     }
 }

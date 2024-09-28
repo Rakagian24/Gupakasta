@@ -51,6 +51,7 @@ class RincianNotaController extends Controller
     {
         $validatedData = $request->validate([
             'npd_id' => 'exists:nota_pencairan_dana,id',
+            'tanggal' => 'nullable|date',
             'anggaran' => 'numeric',
             'akumulasi_sebelumnya' => 'nullable|numeric',
             'pencairan' => 'nullable|numeric',
@@ -96,6 +97,7 @@ class RincianNotaController extends Controller
     {
         $validatedData = $request->validate([
             'npd_id' => 'exists:nota_pencairan_dana,id',
+            'tanggal' => 'date',
             'anggaran' => 'numeric',
             'akumulasi_sebelumnya' => 'nullable|numeric',
             'pencairan' => 'nullable|numeric',

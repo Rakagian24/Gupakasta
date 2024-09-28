@@ -41,6 +41,7 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Tanggal</th>
                                             <th>Kode Rekening</th>
                                             <th>Uraian</th>
                                             <th>Anggaran</th>
@@ -54,6 +55,7 @@
                                         @forelse ($rincianNota as $rn)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $rn->tanggal }}</td>
                                                 <td>{{ $rn->notaPencairanDana->sub_kegiatan->kegiatan->program->bidangUrusan->urusan->kode_urusan }}.{{ $rn->notaPencairanDana->sub_kegiatan->kegiatan->program->bidangUrusan->kode_bidang_urusan }}.{{ $rn->notaPencairanDana->sub_kegiatan->kegiatan->program->kode_program }}
                                                 </td>
                                                 <td>{{ $rn->notaPencairanDana->sub_kegiatan->kegiatan->program->nama_program }}

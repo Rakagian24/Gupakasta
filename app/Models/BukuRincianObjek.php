@@ -18,4 +18,9 @@ class BukuRincianObjek extends Model
     {
         return $this->belongsTo(AnggaranRekening::class, 'anggaran_rekening_id', 'id');
     }
+
+    public function pajak()
+    {
+        return $this->hasMany(Pajak::class, 'kode_bro', 'id');
+    }
 }

@@ -31,6 +31,11 @@
                                     <li class="list-group-item">Tahun Anggaran : {{ $notaPencairanDana->tahun }}</li>
                                     <li class="list-group-item">Nomer : {{ $notaPencairanDana->nomer }} </li>
                                 </ul>
+                                <div class="form-group">
+                                    <label for="exampleInputdate">Tanggal</label>
+                                    <input type="date" class="form-control" id="exampleInputdate" value=""
+                                        name="tanggal">
+                                </div>
                                 <div class="input-group mb-4">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="basic-addon1">Anggaran</span>

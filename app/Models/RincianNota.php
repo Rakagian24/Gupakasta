@@ -13,6 +13,7 @@ class RincianNota extends Model
     protected $fillable = [
         'npd_id',
         'anggaran',
+        'tanggal',
         'akumulasi_sebelumnya',
         'pencairan',
         'sisa_anggaran',

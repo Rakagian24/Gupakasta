@@ -21,12 +21,12 @@
                                 @if ($anggaranRekening)
                                     <ul class="list-group list-group-flush mb-3">
                                         <li class="list-group-item d-flex">
-                                            <span class="flex-shrink-0" style="width: 250px;">SKPD :</span>
-                                            <span>Dinas Perumahan dan Kawasan Permukiman</span>
+                                            <span class="flex-shrink-0" style="width: 250px;">SKPD</span>
+                                            <span>: Dinas Perumahan dan Kawasan Permukiman</span>
                                         </li>
                                         <li class="list-group-item d-flex">
-                                            <span class="flex-shrink-0" style="width: 250px;">Kode Rekening :</span>
-                                            <span>
+                                            <span class="flex-shrink-0" style="width: 250px;">Kode Rekening</span>
+                                            <span>:
                                                 {{ $anggaranRekening->subRincianObjek->rincianObjek->objek->jenis->kelompok->akun->kode_akun }}.
                                                 {{ $anggaranRekening->subRincianObjek->rincianObjek->objek->jenis->kelompok->kode_kelompok }}.
                                                 {{ $anggaranRekening->subRincianObjek->rincianObjek->objek->jenis->kode_jenis }}.
@@ -36,16 +36,16 @@
                                             </span>
                                         </li>
                                         <li class="list-group-item d-flex">
-                                            <span class="flex-shrink-0" style="width: 250px;">Nama Rekening :</span>
-                                            <span>{{ $anggaranRekening->subRincianObjek->nama_sub_rincian_objek }}</span>
+                                            <span class="flex-shrink-0" style="width: 250px;">Nama Rekening</span>
+                                            <span>: {{ $anggaranRekening->subRincianObjek->nama_sub_rincian_objek }}</span>
                                         </li>
                                         <li class="list-group-item d-flex">
-                                            <span class="flex-shrink-0" style="width: 250px;">Jumlah Anggaran (RKA) :</span>
-                                            <span>{{ formatRupiah($anggaranRekening->sisa_anggaran) }}</span>
+                                            <span class="flex-shrink-0" style="width: 250px;">Jumlah Anggaran (RKA)</span>
+                                            <span>: {{ formatRupiah($anggaranRekening->sisa_anggaran) }}</span>
                                         </li>
                                         <li class="list-group-item d-flex">
-                                            <span class="flex-shrink-0" style="width: 250px;">Tahun Anggaran :</span>
-                                            <span>{{ $anggaranRekening->created_at->year }}</span>
+                                            <span class="flex-shrink-0" style="width: 250px;">Tahun Anggaran</span>
+                                            <span>: {{ $anggaranRekening->created_at->year }}</span>
                                         </li>
                                     </ul>
                                 @else
